@@ -24,124 +24,129 @@ Looping = 0
 Begining = 0
  
 MsgBox Lancé
-While (Begining = 0)
-{
-    Fishing := 0
-    if(Durability = 0)
+ While (Begining = 0)
     {
-        Send {Tab}
-        Sleep,3000
-        MouseMove, 870, 659
-        Sleep, 1000
-        Send {lbutton down}
-        Sleep, 200
-        Send {lbutton up}
-        Sleep, 2000
-        MouseMove, 961, 675
-        Sleep, 1000
-        Send {lbutton down}
-        Sleep, 200
-        Send {lbutton up}
-        MouseMove, 1003, 577
-        Sleep, 1000
-        Send {lbutton down}
-        Sleep, 200
-        Send {lbutton up}
-        Sleep, 200
-        Send {Tab}
-        Durability = durabilityMax
-        Sleep, 2000
-        Send {F3}
-        Sleep, 2000
-        Send {lbutton down}
-        Random, lancer, 1800, 2000
-        Sleep lancer
-        Send {lbutton up}
-    }
-    else  
-    {
-        PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Cherche la couleur verte dans un rectangle défini
-        if (ErrorLevel = 0){
-            While(Fishing = 0)
-            {
-                PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Cherche la couleur bleue dans un rectangle défini
-                if(ErrorLevel = 0)
+        Fishing = 0
+                if(Durability = 0)
                 {
-                    Send {lbutton down}
-                    Send {lbutton up}
-                    Send {lbutton down}
-                    Send {lbutton up}
-                    Send {lbutton down}
-                    Send {lbutton up}
-                    Send {lbutton down}
-                    Send {lbutton up}
-                     
+                    Send {Tab}
+                    Sleep,3000
+                    MouseMove, 870, 659
+                    Sleep, 1000
                     Send {lbutton down}
                     Sleep, 200
                     Send {lbutton up}
-                     
+                    Sleep, 2000
+                    MouseMove, 961, 675
+                    Sleep, 1000
                     Send {lbutton down}
                     Sleep, 200
                     Send {lbutton up}
-                     
+                    MouseMove, 1003, 577
+                    Sleep, 1000
                     Send {lbutton down}
                     Sleep, 200
                     Send {lbutton up}
-                     
-                    Send {lbutton down}
                     Sleep, 200
-                    Send {lbutton up}
-                     
-                    Send {lbutton down}
-                    Sleep, 200
-                    Send {lbutton up}
-                     
-                    Sleep, 4500
-                     
+                    Send {Tab}
+                    Durability = durabilityMax
+                    Sleep, 2000
+                    Send {F3}
+                    Sleep, 2000
                     Send {lbutton down}
                     Random, lancer, 1800, 2000
                     Sleep lancer
                     Send {lbutton up}
-                     
-                    Fishing := 1
-                    Durability -= 10
                 }
-                else 
-                 {
-                    Send {lbutton down} ; Laisse la souris appuyée
+                else
+                {
+                    PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Cherche la couleur verte dans un rectangle défini
 
-                    if(iTirer < tirer)
-                    { 
-                    Sleep 100
-                    iTirer +=100
-                else 
-                 {
-                Send {lbutton down} ; Laisse la souris appuyée
-                 
-                if(iTirer < tirer)
-                { 
-                Sleep 100
-                iTirer +=100
+                        if (ErrorLevel = 0)
+                        {
+                            While(Fishing = 0)
+                            {
+                                PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Cherche la couleur bleue dans un rectangle défini
+
+                                    if(ErrorLevel = 0)
+                                    {
+                                        Send {lbutton down}
+                                        Send {lbutton up}
+                                        Send {lbutton down}
+                                        Send {lbutton up}
+                                        Send {lbutton down}
+                                        Send {lbutton up}
+                                        Send {lbutton down}
+                                        Send {lbutton up}
+
+                                        Send {lbutton down}
+                                        Sleep, 200
+                                        Send {lbutton up}
+
+                                        Send {lbutton down}
+                                        Sleep, 200
+                                        Send {lbutton up}
+
+                                        Send {lbutton down}
+                                        Sleep, 200
+                                        Send {lbutton up}
+
+                                        Send {lbutton down}
+                                        Sleep, 200
+                                        Send {lbutton up}
+
+                                        Send {lbutton down}
+                                        Sleep, 200
+                                        Send {lbutton up}
+
+                                        Sleep, 4500
+
+                                        Send {lbutton down}
+                                        Random, lancer, 1800, 2000
+                                        Sleep lancer
+                                        Send {lbutton up}
+
+                                        Fishing := 1
+                                        Durability -= 10
+                                    }
+                                    else
+                                    {
+                                        Send {lbutton down} ; Laisse la souris appuyée
+
+                                            if(iTirer < tirer)
+                                            {
+                                                Sleep 100
+                                                iTirer +=100
+                                            }
+                                            else
+                                            {
+                                                isTiring=1
+                                            }
+                                            if(isTiring = 1)
+                                            {
+                                                Send {lbutton up} ; Relache la souris
+
+                                                    if(iPause < pause)
+                                                    {
+                                                        Sleep 100
+                                                        iPause +=100
+                                                    }
+                                            }
+                                            else
+                                            {
+                                                isTiring=0
+                                                iTirer=0
+                                                iPause=0
+                                            }
+
+                                    }
+                            }
+                        }
                 }
-            else  
-            {
-            isTiring=1
-            } 
-        if(isTiring=1)
-        { 
-        Send {lbutton up} ; Relache la souris
-        if(iPause < pause)
-        { 
-        Sleep 100
-        iPause +=100
-        }
-    else  
-    {
-    isTiring=0
-    iTirer=0
-    iPause=0
-} } } } } } } 
- 
+    }
+
+}
+
 ^1::
-MouseGetPos MouseX, MouseY
-MsgBox %MouseX%, %MouseY%
+        MouseGetPos MouseX, MouseY
+        MsgBox %MouseX%, %MouseY%
