@@ -2,15 +2,16 @@
 ; #Warn ; Enable warnings to assist with detecting common errors.
 SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
- 
+
 ^5::ExitApp ; Ctrl + 5 = Termine l'application
 ^4::Reload ; Ctrl + 4 = Remet à 0 le script
 !p:: ; ALT + P = Commence la detection de pêche
- 
- 
-Durability = 10
+
+
+Durability = 800
 durabilityMax = 900
- 
+rotation := 135 ; rotation de la boussole après avoir eu un poisson rare (Azimut)
+
 MyNumber = 0
 Fishing = 0
 Random, tirer, 800, 950 ; Variable tirer aléatoirement entre 400 et 600ms
@@ -22,131 +23,153 @@ isTiring = 0
 isPausing = 0
 Looping = 0
 Begining = 0
- 
+turn = 5
+Rare = 0
+
 MsgBox Lancé
- While (Begining = 0)
-    {
-        Fishing = 0
-                if(Durability = 0)
-                {
-                    Send {Tab}
-                    Sleep,3000
-                    MouseMove, 870, 659
-                    Sleep, 1000
-                    Send {lbutton down}
-                    Sleep, 200
-                    Send {lbutton up}
-                    Sleep, 2000
-                    MouseMove, 961, 675
-                    Sleep, 1000
-                    Send {lbutton down}
-                    Sleep, 200
-                    Send {lbutton up}
-                    MouseMove, 1003, 577
-                    Sleep, 1000
-                    Send {lbutton down}
-                    Sleep, 200
-                    Send {lbutton up}
-                    Sleep, 200
-                    Send {Tab}
-                    Durability = durabilityMax
-                    Sleep, 2000
-                    Send {F3}
-                    Sleep, 2000
-                    Send {lbutton down}
-                    Random, lancer, 1800, 2000
-                    Sleep lancer
-                    Send {lbutton up}
-                }
-                else
-                {
-                    PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Cherche la couleur verte dans un rectangle défini
+While (Begining = 0)
+{
 
-                        if (ErrorLevel = 0)
-                        {
-                            While(Fishing = 0)
-                            {
-                                PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Cherche la couleur bleue dans un rectangle défini
+Fishing := 0
+if(Durability = 0)
+{
+Send {Tab}
+Sleep,3000
+MouseMove, 870, 659
+Sleep, 1000
+Send {F6 down}
+Sleep, 200
+Send {F6 up}
+Sleep, 2000
+MouseMove, 961, 675
+Sleep, 1000
+Send {F6 down}
+Sleep, 200
+Send {F6 up}
+MouseMove, 1003, 577
+Sleep, 1000
+Send {F6 down}
+Sleep, 200
+Send {F6 up}
+Sleep, 200
+Send {Tab}
+Durability = durabilityMax
+Sleep, 2000
+Send {F3}
+Sleep, 2000
+Send {F6 down}
+Random, lancer, 1800, 2000
+Sleep lancer
+Send {F6 up}
+}
+else
+{
 
-                                    if(ErrorLevel = 0)
-                                    {
-                                        Send {lbutton down}
-                                        Send {lbutton up}
-                                        Send {lbutton down}
-                                        Send {lbutton up}
-                                        Send {lbutton down}
-                                        Send {lbutton up}
-                                        Send {lbutton down}
-                                        Send {lbutton up}
-
-                                        Send {lbutton down}
-                                        Sleep, 200
-                                        Send {lbutton up}
-
-                                        Send {lbutton down}
-                                        Sleep, 200
-                                        Send {lbutton up}
-
-                                        Send {lbutton down}
-                                        Sleep, 200
-                                        Send {lbutton up}
-
-                                        Send {lbutton down}
-                                        Sleep, 200
-                                        Send {lbutton up}
-
-                                        Send {lbutton down}
-                                        Sleep, 200
-                                        Send {lbutton up}
-
-                                        Sleep, 4500
-
-                                        Send {lbutton down}
-                                        Random, lancer, 1800, 2000
-                                        Sleep lancer
-                                        Send {lbutton up}
-
-                                        Fishing := 1
-                                        Durability -= 10
-                                    }
-                                    else
-                                    {
-                                        Send {lbutton down} ; Laisse la souris appuyée
-
-                                            if(iTirer < tirer)
-                                            {
-                                                Sleep 100
-                                                iTirer +=100
-                                            }
-                                            else
-                                            {
-                                                isTiring=1
-                                            }
-                                            if(isTiring = 1)
-                                            {
-                                                Send {lbutton up} ; Relache la souris
-
-                                                    if(iPause < pause)
-                                                    {
-                                                        Sleep 100
-                                                        iPause +=100
-                                                    }
-                                            }
-                                            else
-                                            {
-                                                isTiring=0
-                                                iTirer=0
-                                                iPause=0
-                                            }
-
-                                    }
-                            }
-                        }
-                }
-    }
-
+PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Cherche la couleur verte dans un rectangle défini
+if (ErrorLevel = 0)
+{
+While(Fishing = 0)
+{
+PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Cherche la couleur bleue dans un rectangle défini
+if(ErrorLevel = 0)
+{
+  
+  Sleep, 500
+  PixelSearch, Px, Py, 953, 545, 1217, 766, 0x235C33, 3, Fast ; Cherche poisson vert 
+  if(ErrorLevel = 0)
+  {
+    Rare := 1
+  }
+  PixelSearch, Px, Py, 953, 545, 1217, 766, 0x493A0E, 3, Fast ; Cherche poisson bleu
+  if(ErrorLevel = 0)
+   {
+    Rare := 1
+   }
+  
+  if(Rare = 1)
+  {
+Sleep, 8000
+Loop
+{
+  if(A_Index < rotation*54,54)
+  {
+DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
+  }
+  else
+  {
+    Rare := 0
+    break
+  }
+}
+}
+ 
+Sleep, 6000
+Send {F6 up}
+Sleep, 100
+Send {F6 down}
+Random, lancer, 1800, 2000
+Sleep lancer
+Send {F6 up}
+Fishing := 1
+isTiring := 0 
+Durability -= 10
+ 
+}
+Else ; pas de bleu
+{
+if(isTiring = 0)
+{
+Send {F6 down} ; Laisse la souris appuyée
 }
 
-^1::
-        MouseGetPos MouseX, MouseY
-        MsgBox %MouseX%, %MouseY%
+if(iTirer < tirer)
+{ 
+ Sleep 100 
+iTirer +=100 
+} 
+else 
+{
+  isTiring=1 
+} 
+if(isTiring=1)
+ { 
+   Send {F6 up} ; Relache la souris
+  if(iPause < pause)
+   { 
+   Sleep 100
+ iPause +=100
+   } 
+   else {
+      isTiring:=0 
+      iTirer:=0 
+      iPause:=0 
+      } } } } } } } 
+
+      
+
+^2::
+rotation := 104
+camera := rotation*54,54
+
+Loop
+{
+  
+  if(A_Index < camera)
+  {
+DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
+  }
+  else
+  {
+    Rare := 0
+    break
+  }
+}
+; ///////// ROTATION DE 108 SUR LA BOUSOLLE /////
+; 4800 = 88 DE ROTATION
+;54 Loop = 1 de rotation
+
+  
+  ^1::
+      MouseGetPos MouseX, MouseY
+      PixelGetColor, color, %MouseX%, %MouseY%
+        MsgBox %MouseX%, %MouseY%, %color%
