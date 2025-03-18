@@ -1,13 +1,33 @@
-This is a fishing bot made for the game New World for educationnal purpose
-It uses AutoHotKey
-The bot will launch the fishing rod, use OCR to check for a fish catch and adapt its reeling
-method based on the fish rarity, it will then adjust the camera to compensate for the camera
-rotation upon catching a fish so it can launch the finish rod back at the same point.
-It will also repair the fishing rod when needed.
+#New World Fishing Bot (Educational Purpose)
 
-Usage :
-Place yourself in front of the water and press ALT + P to start the bot.
-When prompted enter your fishing rod current durability and the azimuths displayed
-on your compass
-To reload the script press CTRL + 4
-To exit completely the script press CTRL + 5
+This is an AutoHotKey-based fishing bot designed for educational purposes in the game New World.
+
+##Features
+
+-Automated Fishing: The bot launches the fishing rod and detects fish catches using OCR.
+
+-Adaptive Reeling: It adjusts the reeling method based on fish rarity.
+
+-Camera Adjustment: Compensates for camera rotation after catching a fish to maintain casting accuracy.
+
+-Auto Repair: Repairs the fishing rod when needed to ensure uninterrupted fishing sessions.
+
+##Usage Instructions
+
+1.Position yourself in front of a water source in New World.
+
+2.Press ALT + P to start the bot.
+
+3.When prompted, enter:
+
+-Your current fishing rod durability.
+
+-The azimuth values displayed on your compass.
+
+##Controls
+
+-Reload Script: Press CTRL + 4.
+
+-Exit Script: Press CTRL + 5.
+
+This bot is intended for educational purposes only and should be used responsibly.
