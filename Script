@@ -1,211 +1,176 @@
-#NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn ; Enable warnings to assist with detecting common errors.
-SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
+^5::ExitApp ; Ctrl + 5 = Exit application
+^4::Reload ; Ctrl + 4 = Reload script
 
-^5::ExitApp ; Ctrl + 5 = Termine l'application
-^4::Reload ; Ctrl + 4 = Remet à 0 le script
-!p:: ; ALT + P = Commence la detection de pêche
+!p:: ; ALT + P = Start fishing detection
 
 InputBox, durabilityMax, Enter Durability, Entrez la durabilité de votre canne à pêche
 InputBox, rotation, Enter Rotation, Entrez la rotation de la boussole après avoir eu un poisson rare (85 par défaut)
 
-durabilityMax = 900
+durabilityMax := 900
 Durability := durabilityMax
-;rotation := 85 ; rotation de la boussole après avoir eu un poisson rare (Azimut)
 
-MyNumber = 0
-Fishing = 0
-Random, tirer, 800, 950 ; Variable tirer aléatoirement entre 400 et 600ms
-Random, tempsPause, 1, 20 ; Variable tempsPause aléatoirement entre 50 et 100ms
-pause := tirer + tempsPause ; Pause et le temps de pause entre chaque reeling
-iTirer = 0;
-iPause = 0;
-isTiring = 0
-isPausing = 0
-Looping = 0
-Begining = 0
-turn = 5
-Rare = 0
-loops = 0
+MyNumber := 0
+Fishing := 0
+Random, tirer, 800, 950 ; Random delay between 800 and 950ms
+Random, tempsPause, 1, 20 ; Random pause time between 1 and 20ms
+pause := tirer + tempsPause
+
+iTirer := 0
+iPause := 0
+isTiring := 0
+isPausing := 0
+Looping := 0
+Begining := 0
+turn := 5
+Rare := 0
+loops := 0
 glitchedLoop := 0
 
-While (Begining = 0)
-{
-OutputDebug En recherche d'un poisson
-Fishing := 0
-loops++
-
-if(Durability = 0)
-{
-  OutputDebug Reparation canne à pêche
-Send {Tab}
-Sleep,3000
-MouseMove, 870, 659
-Sleep, 1000
-Send {F6 down}
-Sleep, 200
-Send {F6 up}
-Sleep, 2000
-MouseMove, 961, 675
-Sleep, 1000
-Send {F6 down}
-Sleep, 200
-Send {F6 up}
-MouseMove, 1003, 577
-Sleep, 1000
-Send {F6 down}
-Sleep, 200
-Send {F6 up}
-Sleep, 200
-Send {Tab}
-Sleep, 2000
-Send {F3}
-Sleep, 2000
-Send {F6 down}
-Durability := durabilityMax
-Random, lancer, 1800, 2000
-Sleep lancer
-Send {F6 up}
-
-}
-else
-{
-PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Cherche la couleur verte dans un rectangle défini
-if (ErrorLevel = 0)
-{
-  OutputDebug TROUVÉ VERT
-  glitchedLoop := 0
-While(Fishing = 0)
-{
-PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Cherche la couleur bleue dans un rectangle défini
-if(ErrorLevel = 0)
-{
-  OutputDebug TROUVÉ BLEU
-  Send {F6 up}
-  Sleep, 500
-  PixelSearch, Px, Py, 953, 545, 1217, 766, 0x235C33, 3, Fast ; Cherche poisson vert 
-  if(ErrorLevel = 0)
-  {
-    Rare := 1
-    OutputDebug TROUVÉ POISSON VERT
-  }
-  PixelSearch, Px, Py, 953, 545, 1217, 766, 0x493A0E, 3, Fast ; Cherche poisson bleu
-  if(ErrorLevel = 0)
-   {
-    Rare := 1
-    OutputDebug TROUVÉ POISSON BLEU
-   }
-  
-  if(Rare = 1)
-  {
-Sleep, 8000
-Loop
-{
-  OutputDebug Je tourne la caméra
-  if(A_Index < rotation*54,54)
-  {
-DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
-  }
-  else
-  {
-    Rare := 0
-    break
-  }
-}
-}
- 
-Sleep, 6000
-Send {F6 up}
-Sleep, 100
-Send {F6 down}
-OutputDebug Je relance la canne à pêche
-Random, lancer, 1800, 2000
-Sleep lancer
-Send {F6 up}
-Fishing := 1
-isTiring := 0 
-Durability -= 10
-loops := 0
- 
-}
-Else ; pas de bleu
-{
-if(isTiring = 0)
-{
-Send {F6 down} ; Laisse la souris appuyée
-}
-
-if(iTirer < tirer)
-{ 
- Sleep 100 
-iTirer +=100 
-OutputDebug En train de tirer
-} 
-else 
-{
-  isTiring=1 
-} 
-if(isTiring=1)
- { 
-   Send {F6 up} ; Relache la souris
-  if(iPause < pause)
-   { 
-   Sleep 100
- iPause +=100
- OutputDebug En train d'attendre
-   } 
-   else 
-   {
-      isTiring:=0 
-      iTirer:=0 
-      iPause:=0 
-      } } } } } 
-if(loops > 1500)
-      {
-        if(glitchedLoop > 0)
-        {
-          OutputDebug, il y un problème, je bouge la caméra
-          Loop, 3000
-          {
-          DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
-          }
+While (Begining = 0) {
+    OutputDebug En recherche d'un poisson
+    Fishing := 0
+    loops++
+    
+    if (Durability = 0) {
+        OutputDebug Reparation canne à pêche
+        Send {Tab}
+        Sleep, 3000
+        MouseMove, 870, 659
+        Sleep, 1000
+        Send {F6 down}
+        Sleep, 200
+        Send {F6 up}
+        Sleep, 2000
+        MouseMove, 961, 675
+        Sleep, 1000
+        Send {F6 down}
+        Sleep, 200
+        Send {F6 up}
+        MouseMove, 1003, 577
+        Sleep, 1000
+        Send {F6 down}
+        Sleep, 200
+        Send {F6 up}
+        Sleep, 200
+        Send {Tab}
+        Sleep, 2000
+        Send {F3}
+        Sleep, 2000
+        Send {F6 down}
+        Durability := durabilityMax
+        Random, lancer, 1800, 2000
+        Sleep, lancer
+        Send {F6 up}
+    } else {
+        PixelSearch, Px, Py, 1, 0, 1915, 274, 0x9BDE00, 3, Fast ; Search for green color
+        if (ErrorLevel = 0) {
+            OutputDebug TROUVÉ VERT
+            glitchedLoop := 0
+            
+            While (Fishing = 0) {
+                PixelSearch, Px, Py, 571, 601, 1364, 872, 0xD7B088, 4, Fast ; Search for blue color
+                if (ErrorLevel = 0) {
+                    OutputDebug TROUVÉ BLEU
+                    Send {F6 up}
+                    Sleep, 500
+                    
+                    PixelSearch, Px, Py, 953, 545, 1217, 766, 0x235C33, 3, Fast ; Search for green fish
+                    if (ErrorLevel = 0) {
+                        Rare := 1
+                        OutputDebug TROUVÉ POISSON VERT
+                    }
+                    
+                    PixelSearch, Px, Py, 953, 545, 1217, 766, 0x493A0E, 3, Fast ; Search for blue fish
+                    if (ErrorLevel = 0) {
+                        Rare := 1
+                        OutputDebug TROUVÉ POISSON BLEU
+                    }
+                    
+                    if (Rare = 1) {
+                        Sleep, 8000
+                        Loop {
+                            OutputDebug Je tourne la caméra
+                            if (A_Index < rotation * 54.54) {
+                                DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
+                            } else {
+                                Rare := 0
+                                break
+                            }
+                        }
+                    }
+                    
+                    Sleep, 6000
+                    Send {F6 up}
+                    Sleep, 100
+                    Send {F6 down}
+                    OutputDebug Je relance la canne à pêche
+                    Random, lancer, 1800, 2000
+                    Sleep, lancer
+                    Send {F6 up}
+                    Fishing := 1
+                    isTiring := 0
+                    Durability -= 10
+                    loops := 0
+                } else { ; No blue color found
+                    if (isTiring = 0) {
+                        Send {F6 down} ; Hold mouse
+                    }
+                    
+                    if (iTirer < tirer) {
+                        Sleep 100
+                        iTirer += 100
+                        OutputDebug En train de tirer
+                    } else {
+                        isTiring := 1
+                    }
+                    
+                    if (isTiring = 1) {
+                        Send {F6 up} ; Release mouse
+                        if (iPause < pause) {
+                            Sleep 100
+                            iPause += 100
+                            OutputDebug En train d'attendre
+                        } else {
+                            isTiring := 0
+                            iTirer := 0
+                            iPause := 0
+                        }
+                    }
+                }
+            }
         }
-OutputDebug, il y un problème, je relance la canne à pêche
-Send {F6 down}
-OutputDebug Je relance la canne à pêche
-Sleep 1900
-Send {F6 up}
-loops := 0
-glitchedLoop++
-      }
-      } } 
-
-      
+        
+        if (loops > 1500) {
+            if (glitchedLoop > 0) {
+                OutputDebug, il y un problème, je bouge la caméra
+                Loop, 3000 {
+                    DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
+                }
+            }
+            OutputDebug, il y un problème, je relance la canne à pêche
+            Send {F6 down}
+            OutputDebug Je relance la canne à pêche
+            Sleep 1900
+            Send {F6 up}
+            loops := 0
+            glitchedLoop++
+        }
+    }
+}
 
 ^2::
 InputBox, rotation, Entre ta rota
-camera := rotation*54,54
-
-Loop
-{
-  
-  if(A_Index < camera)
-  {
-DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
-  }
-  else
-  {
-    Rare := 0
-    break
-  }
+camera := rotation * 54.54
+Loop {
+    if (A_Index < camera) {
+        DllCall("mouse_event", "UInt", 0x01, "UInt", 1, "UInt", 0)
+    } else {
+        Rare := 0
+        break
+    }
 }
-; ///////// ROTATION DE 108 SUR LA BOUSOLLE /////
-; 4800 = 88 DE ROTATION
-;54 Loop = 1 de rotation
 
-  
-  ^1::
-      MouseGetPos MouseX, MouseY
-      PixelGetColor, color, %MouseX%, %MouseY%
-        MsgBox %MouseX%, %MouseY%, %color%
+^1::
+MouseGetPos, MouseX, MouseY
+PixelGetColor, color, %MouseX%, %MouseY%
+MsgBox, %MouseX%, %MouseY%, %color%
